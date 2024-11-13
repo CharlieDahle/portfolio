@@ -1,0 +1,28 @@
+body {
+    font-family: 'Rubik Mono One', sans-serif;
+
+
+    background-color: #f6ede2;
+
+    /* Default font for body text */
+}
+
+h1 {
+    font-family: 'Archivo Black', sans-serif;
+    /* Font for h1 */
+}
+
+h2 {
+    font-family: 'Fjalla One', sans-serif;
+    /* Font for h2 */
+}
+
+.custom-text {
+    font-family: 'Ranchers', cursive;
+    /* Font for a specific class */
+}
+
+.pink-btn {
+    background-color: pink;
+    border-color: pink;
+}
