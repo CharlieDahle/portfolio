@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-    margin-top: 16vh;
+    margin-top: 20vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,7 +18,58 @@ body {
     padding: 40px;
     padding-top: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 480px;
     width: 420px;
+    border-radius: 8px;
 
+}
+
+/* General Button Styles */
+.button {
+    --btn-padding-x: 0.75rem;
+    --btn-padding-y: 0.375rem;
+    --btn-font-size: 1rem;
+    --btn-font-weight: 400;
+    --btn-line-height: 1.5;
+    --btn-border-width: var(--bs-border-width);
+    --btn-border-color: transparent;
+    --btn-border-radius: var(--bs-border-radius);
+    --btn-hover-border-color: transparent;
+
+    display: inline-block;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    font-family: var(--btn-font-family);
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    color: var(--btn-color);
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    border: var(--btn-border-width) solid var(--btn-border-color);
+    border-radius: var(--btn-border-radius);
+    background-color: var(--btn-bg);
+}
+
+/* Custom Pink Button (EFAAC4) */
+.btn-pink {
+    --btn-color: #fff;
+    --btn-bg: #ee92b6;
+
+}
+
+.btn-pink:hover {
+    --btn-bg: #e67ba3;
+    /* This is a darker shade of the original pink */
+    background-color: var(--btn-bg);
+}
+
+.custom-link {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.custom-link:hover {
+    text-decoration: underline;
+    color: blue;
+    /* or any color you prefer for hover state */
 }

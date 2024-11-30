@@ -26,3 +26,13 @@ h2 {
     background-color: pink;
     border-color: pink;
 }
+
+.contain-him {
+    background-color: white;
+    padding: 40px;
+    padding-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 900px;
+    height: 600px;
+    border-radius: 8px;
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Practice</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fjalla+One&family=Ranchers&family=Rubik+Mono+One&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="index-styles.css">
+</head>
+
+<body>
+    <nav class="navbar sticky-top" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <img src="static/images/flowers.webp" alt="" width="50" height="50">
+            <a href="trying.html">
+                <button class="btn btn-outline-secondary">daisy</button>
+            </a>
+            <a href="charlie.html">
+                <button class="btn btn-outline-danger">charlie</button>
+            </a>
+            <form class="d-flex" action="ram.html">
+                <button class="btn btn-outline-success" type="submit">Ram!</button>
+            </form>
+        </div>
+    </nav>
+
+
+    <div class="row">
+
+        <div class="col-md-3" style="border: red; border-style:dashed;">
+
+            <div>
+                <nav class="navbar bg-light">
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search Contacts">
+                        <button class="btn btn-outline-success" type="submit">go</button>
+                    </form>
+                </nav>
+            </div>
+
+
+
+        </div>
+
+        <div class="col me-5 ms-2" style="border: blue; border-style:dashed;"></div>
+
+
+
+
+
+
+
+        <!-- <h2>WebSocket Chat</h2>
+        <textarea id="messages" rows="10" cols="30" readonly></textarea><br>
+        <input type="text" id="inputMessage" placeholder="Type a message" />
+        <button onclick="sendMessage()">Send</button> -->
+
+        <script>
+
+            // Create a new WebSocket connection to the server
+            const socket = new WebSocket('ws://localhost:3000/oyster-talk');
+
+            // Listen for messages from the server
+            socket.onmessage = function (event) {
+                const messages = document.getElementById('messages');
+                messages.value += `Server: ${event.data}\n`;  // Display the received message
+            };
+
+            // Handle connection open event
+            socket.onopen = function () {
+                console.log('Connected to WebSocket server');
+            };
+
+            // Handle connection close event
+            socket.onclose = function () {
+                console.log('Disconnected from WebSocket server');
+            };
+
+            // Function to send a message to the server
+            function sendMessage() {
+                const inputMessage = document.getElementById('inputMessage').value;
+
+                let messageToSend = {
+                    'sender': 'charlie',
+                    'recipient': 'daisy',
+                    'content': inputMessage,
+                }
+
+                const jsonString = JSON.stringify(messageToSend);
+
+                socket.send(jsonString);  // Send message to the server
+                document.getElementById('inputMessage').value = '';  // Clear the input field
+            }
+        </script>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
