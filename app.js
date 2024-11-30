@@ -1,7 +1,8 @@
 const express = require('express');  // Import Express
 const session = require('express-session');  // Import session middleware
 const passport = require('./config/passport');
-const db = require('./database');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./database/database.db');
 const messageRoutes = require('./message');  // Import WebSocket logic
 const expressWs = require("express-ws");
 
@@ -72,5 +73,19 @@ app.get('/logout', (req, res) => {
     req.logout((err) => {
         if (err) return next(err);
         res.redirect('/trying');  // Redirect to login page after logout
+    });
+});
+
+
+
+
+
+app.get('/api/usernames', (req, res) => {
+    db.all("SELECT username FROM users", (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        const usernames = rows.map(row => row.username);
+        res.json(usernames);
     });
 });

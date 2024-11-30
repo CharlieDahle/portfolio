@@ -6,12 +6,14 @@
 
 
 
-const expressWs = require('express-ws');
 
 activeSessions = [];
 
 module.exports = function (app) {
-    expressWs(app);  // Integrates express-ws with the app
+
+
+
+
 
     // WebSocket route for /hello
     app.ws('/oyster-talk', function (ws, req) {
@@ -35,9 +37,8 @@ module.exports = function (app) {
 
 
 
-
             //ws.send('Message received: ' + msg);  // Send message back
-            // broadcastMessage(msg);
+            broadcastMessage(msg);
         });
 
         ws.on('close', () => {
