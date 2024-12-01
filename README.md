@@ -1,8 +1,8 @@
 # portfolio
  
-Bootstrap 5
-React
-Express
-Sqlite
+Bootstrap 5,
+React,
+Express,
+Sqlite,
 
 
