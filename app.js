@@ -46,20 +46,22 @@ app.listen(PORT, () => {
 
 app.get('/trying', (req, res) => {
     res.sendFile(__dirname + '/public/trying.html');
-})
+
+});
+
+app.get('/chat', isAuthenticated, (req, res) => {
+    res.sendFile(__dirname + '/private/chat.html');
+});
 
 // POST route to handle login form submission
 app.post('/login',
     passport.authenticate('local',
         {
-            successRedirect: '/charlie',
-            failureRedirect: '/login'
+            successRedirect: '/chat',
+            failureRedirect: '/trying'
         })
 );
 
-app.get('/charlie', isAuthenticated, (req, res) => {
-    res.sendFile(__dirname + '/public/charlie.html');
-});
 
 // Middleware to check if user is authenticated
 function isAuthenticated(req, res, next) {
