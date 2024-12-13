@@ -80,8 +80,6 @@ app.get('/logout', (req, res) => {
 
 
 
-
-
 app.get('/api/usernames', (req, res) => {
     db.all("SELECT username FROM users", (err, rows) => {
         if (err) {
@@ -91,3 +89,60 @@ app.get('/api/usernames', (req, res) => {
         res.json(usernames);
     });
 });
+
+app.post('/api/convo', (req, res) => {
+    const { username } = req.body;
+    const currentUser = req.user.username;  // Get the logged-in user's username
+
+    console.log(currentUser + " viewing convo with " + username);
+
+    // Step 1: Find the conversation ID between these two users
+    const findConvoQuery = `
+        SELECT c.id 
+        FROM conversations c
+        JOIN conversation_participants cp1 ON c.id = cp1.conversation_id
+        JOIN conversation_participants cp2 ON c.id = cp2.conversation_id
+        WHERE cp1.user_id = (SELECT id FROM users WHERE username = ?) 
+        AND cp2.user_id = (SELECT id FROM users WHERE username = ?)
+    `;
+
+    db.get(findConvoQuery, [currentUser, username], (err, convo) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        if (!convo) {
+            return res.status(404).json({ error: 'Conversation not found' });
+        }
+
+        const convoId = convo.id;
+
+        // Step 2: Get the last 20 messages for this conversation
+        const getMessagesQuery = `
+            SELECT m.content, m.sent_at, u.username AS sender
+            FROM messages m
+            JOIN users u ON m.sender_id = u.id
+            WHERE m.conversation_id = ?
+            ORDER BY m.sent_at DESC
+            LIMIT 20
+        `;
+
+        db.all(getMessagesQuery, [convoId], (err, messages) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+
+            // Step 3: Return the messages and the conversation ID in JSON format
+            res.json({
+                convo_id: convoId,
+                messages: messages.reverse()  // Reverse to return messages in correct order
+            });
+        });
+    });
+});
+
+
+
+

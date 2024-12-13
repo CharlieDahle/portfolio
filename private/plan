@@ -1,0 +1,45 @@
+Users Table:
+| Column       | Type        | Notes                                   |
+|--------------|-------------|-----------------------------------------|
+| id           | INTEGER     | Primary key, auto-increment            |
+| username     | TEXT        | Unique                                 |
+| passoword    | TEXT        | its the password                        |
+
+Conversations Table:
+| Column       | Type        | Notes                                   |
+|--------------|-------------|-----------------------------------------|
+| id           | INTEGER     | Primary key, auto-increment            |
+| created_at   | TIMESTAMP   | Defaults to CURRENT_TIMESTAMP          |
+| updated_at   | TIMESTAMP   | Updated when the latest message is sent|
+
+Conversation Participants Table:
+| Column           | Type        | Notes                                   |
+|------------------|-------------|-----------------------------------------|
+| conversation_id  | INTEGER     | Foreign key referencing conversations  |
+| user_id          | INTEGER     | Foreign key referencing users          |
+| PRIMARY KEY      | (conversation_id, user_id) | Composite primary key    |
+
+Messages Table:
+| Column           | Type        | Notes                                   |
+|------------------|-------------|-----------------------------------------|
+| id               | INTEGER     | Primary key, auto-increment            |
+| conversation_id  | INTEGER     | Foreign key referencing conversations  |
+| sender_id        | INTEGER     | Foreign key referencing users          |
+| content          | TEXT        | Message content                        |
+| sent_at          | TIMESTAMP   | Defaults to CURRENT_TIMESTAMP          |
+
+
+
+How a message gets sent:
+
+a signed in user sends a message to the websocket server. The message is a JSON which contains 
+a sender, receipient, and content. The websocket server logs the message in the database, then pushes
+the message to the receipient's client and it is dynamically displayed in a chat bubble div using 
+react. 
+
+
+
+When a user clicks on a conversation:
+
+the messages of the conversation are recalled from the database and loaded in using react
+

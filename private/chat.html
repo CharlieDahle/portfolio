@@ -7,6 +7,8 @@
     <title>Bootstrap Practice</title>
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="/static/css/chat.css" rel="stylesheet">
 </head>
 
 <body>
@@ -20,125 +22,63 @@
                     </form>
                 </nav>
             </div>
-            <!-- <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-            <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-            <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> -->
 
             <div id="root" style="height: calc(100vh - 88px); overflow-y: auto;">
                 <!-- Content will scroll here -->
             </div>
-
-
-            <script type="module">
-
-                const { useState, useEffect } = React;
-
-                // UserList Component
-                const UserList = () => {
-                    const [usernames, setUsernames] = useState([]);
-                    const [loading, setLoading] = useState(true);
-
-                    useEffect(() => {
-                        const fetchUsernames = async () => {
-                            try {
-                                const response = await fetch('/api/usernames');
-                                const data = await response.json();
-                                setUsernames(data);
-                            } catch (error) {
-                                console.error('Error:', error);
-                            } finally {
-                                setLoading(false);
-                            }
-                        };
-
-                        fetchUsernames();
-                    }, []);
-
-                    if (loading) return React.createElement('div', null, 'Loading...');
-                    if (usernames.length === 0) return React.createElement('div', null, 'No users found');
-
-                    return React.createElement(
-                        'div',
-                        { className: 'd-flex flex-column p-3 bg-light', style: { width: '100%' } },
-                        React.createElement('h4', null, 'Contacts'),
-                        React.createElement(
-                            'div',
-                            { className: 'list-group' },
-                            usernames.map((username, index) =>
-                                React.createElement(
-                                    'a',
-                                    {
-                                        key: index,
-                                        href: '#',
-                                        className: 'list-group-item list-group-item-action d-flex align-items-center',
-                                        style: { padding: '10px' }
-                                    },
-                                    React.createElement('img', { src: 'public/static/images/ram1.png', className: 'rounded-circle', width: '40', height: '40' }),
-                                    React.createElement('span', { className: 'ms-3' }, username)
-                                )
-                            )
-                        )
-                    );
-                };
-
-                // Rendering the UserList component
-                ReactDOM.render(React.createElement(UserList), document.getElementById('root'));
-            </script>
         </div>
 
+        <div class="col" style="background-color: #f1f8fe;">
 
 
+            <div class="d-flex justify-content-between align-items-center bg-secondary p-3 text-white rounded-top">
+                <div class="d-flex align-items-center">
+                    <div class="avatar me-3">
+                        <img src="https://via.placeholder.com/40" class="rounded-circle" alt="User Avatar">
+                    </div>
+                    <span class="h5 mb-0" id="username">Example User Name</span>
+                    <p value="" id="convo_id">Convo id: ?</p>
+                </div>
+                <div>
+                    <button class="btn btn-transparent text-white fs-4 me-3" aria-label="Settings">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                    <button class="btn btn-transparent text-white fs-4" aria-label="Attachments">
+                        <i class="bi bi-paperclip"></i>
+                    </button>
+                </div>
+            </div>
 
+            <div id="chat_window" style="height: 78vh; overflow-y: auto;">
+                <!-- this is where the chat boxes are -->
+            </div>
 
+            <div class="d-flex align-items-center p-3 bg-light border-top">
+                <div class="flex-grow-1 me-2">
+                    <input id="inputMessage" type="text" class="form-control" placeholder="Type a message..."
+                        aria-label="Message Input">
+                </div>
+                <div>
+                    <button class="btn btn-transparent text-primary fs-4 me-3" aria-label="Attachments">
+                        <i class="bi bi-paperclip"></i>
+                    </button>
+                    <button id="sendButton" class="btn btn-primary text-white fs-4" aria-label="Send">
+                        <i class="bi bi-send"></i>
+                    </button>
 
-        <div class="col">
+                </div>
+            </div>
 
         </div>
 
-        <script>
+        <!-- Bootstrap JS and dependencies -->
+        <script src="/static/js/react-components.js" type="module"></script>
+        <script src="/static/js/websocket.js" type="module"></script>
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
-            // Create a new WebSocket connection to the server
-            const socket = new WebSocket('ws://localhost:3000/oyster-talk');
-
-            // Listen for messages from the server
-            socket.onmessage = function (event) {
-                const messages = document.getElementById('messages');
-                messages.value += `Server: ${event.data}\n`;  // Display the received message
-            };
-
-            // Handle connection open event
-            socket.onopen = function () {
-                console.log('Connected to WebSocket server');
-            };
-
-            // Handle connection close event
-            socket.onclose = function () {
-                console.log('Disconnected from WebSocket server');
-            };
-
-            // Function to send a message to the server
-            function sendMessage() {
-                const inputMessage = document.getElementById('inputMessage').value;
-
-                let messageToSend = {
-                    'sender': 'charlie',
-                    'recipient': 'daisy',
-                    'content': inputMessage,
-                }
-
-                const jsonString = JSON.stringify(messageToSend);
-
-                socket.send(jsonString);  // Send message to the server
-                document.getElementById('inputMessage').value = '';  // Clear the input field
-            }
-        </script>
-    </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </body>
 
 </html>
