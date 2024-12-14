@@ -17,6 +17,13 @@ socket.onclose = function () {
     console.log('Disconnected from WebSocket server');
 };
 
+const sendButton = document.getElementById("sendButton");
+if (sendButton) {
+    console.log(sendButton);
+};
+
+sendButton.addEventListener('click', sendMessage);
+
 // Function to send a message to the server
 function sendMessage() {
     const inputMessage = document.getElementById('inputMessage').value;
@@ -37,5 +44,3 @@ function sendMessage() {
     socket.send(jsonString);  // Send message to the server
     document.getElementById('inputMessage').value = '';  // Clear the input field
 }
-
-window.sendMessage = sendMessage;
