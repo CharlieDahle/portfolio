@@ -1,12 +1,15 @@
 
+console.log("here");
+
 const { useState, useEffect } = React;
-// UserList Component
+// this creates the contacts
 const UserList = () => {
     const [usernames, setUsernames] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    useEffect(() => {   // db query for usernames
         const fetchUsernames = async () => {
+            console.log("here");
             try {
                 const response = await fetch('/api/usernames');
                 const data = await response.json();
@@ -39,7 +42,7 @@ const UserList = () => {
 
                 // Update messages
                 ReactDOM.render(
-                    React.createElement(ProcessMessage, { messages: data.messages, username }),
+                    React.createElement(renderMessage, { messages: data.messages, username }),
                     document.getElementById('chat_window')
                 );
             })
@@ -76,39 +79,37 @@ const UserList = () => {
 function renderMessage(sender, message, sent_at) {
     const bubbleClass = sender ? 'message-bubble right' : 'message-bubble left';
 
-    // React component to render the message
-    const MessageComponent = () => (
-        <div className={bubbleClass}>
-            <p>{message}</p>
-            <span className="timestamp">{sent_at}</span>
-        </div>
-    );
+    const MessageComponent = () => {
+        return React.createElement(
+            'div',
+            { className: bubbleClass },
+            React.createElement('p', null, message),
+            React.createElement('span', { className: 'timestamp' }, sent_at)
+        );
+    };
 
     // Render the component to the #messages container
-    const messagesContainer = document.getElementById('messages');
+    const messagesContainer = document.getElementById('chat_window');
     const wrapper = document.createElement('div'); // Create a wrapper for each message
     messagesContainer.appendChild(wrapper); // Append wrapper to container
 
-    ReactDOM.render(<MessageComponent />, wrapper);
-}
-
-function ProcessMessage({ messages, username }) {
-    return (
-        <div>
-            {messages.map((msg, index) => (
-                <div
-                    key={index}
-                    className={msg.sender === username ? 'message-bubble right' : 'message-bubble left'}
-                >
-                    <p>{msg.content}</p>
-                    <span className="timestamp">{msg.sent_at}</span>
-                </div>
-            ))}
-        </div>
+    ReactDOM.render(
+        React.createElement(MessageComponent, null),
+        wrapper
     );
 }
 
+function processMessages(messages, username) {
+    messages.forEach(msg => {
+        const isSender = msg.sender === username;
+        const formattedSentAt = new Date(msg.sent_at).toLocaleString();
+        renderMessage(isSender, msg.content, formattedSentAt);
+        renderMessage(isSender, msg.content, msg.sent_at);
+    });
+}
+
 // // Messages Component
+
 // const Messages = ({ messages, username }) => {
 
 //     const renderMessages = () => {
@@ -142,4 +143,6 @@ function ProcessMessage({ messages, username }) {
 
 
 // Initial Render of UserList
+
+
 ReactDOM.render(React.createElement(UserList), document.getElementById('root'));
