@@ -1,113 +1,178 @@
 
-console.log("here");
+/**
+ * Rendering contacts:
+ * - get usernames from /api/usernames
+ * - figured out how react works lol 
+ * - ???
+ */
 
+
+
+
+// need effect for making the api call, need state for waiting for the api call's response
 const { useState, useEffect } = React;
-// this creates the contacts
-const UserList = () => {
-    const [usernames, setUsernames] = useState([]);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {   // db query for usernames
-        const fetchUsernames = async () => {
-            console.log("here");
-            try {
-                const response = await fetch('/api/usernames');
-                const data = await response.json();
-                setUsernames(data);
-            } catch (error) {
-                console.error('Error:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+// react component to render contacts
+export default function Contacts() {
+    const [contacts, setContacts] = useState([]);
+    const [loading, setLoading] = useState(true); // Track loading state
 
-        fetchUsernames();
+
+    // simple api call to get contact names
+    useEffect(() => {
+        fetch('/api/usernames', { method: 'GET' })
+            .then((response) => response.json())
+            .then((data) => {
+                setContacts(data);
+                setLoading(false); // Stop loading after data is fetched
+            });
     }, []);
 
-    const handleUserClick = (username) => {
-        // Fetch conversation data on user click
-        fetch('/api/convo', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("convo_id").innerText = "Convo ID: " + data.convo_id;
-                document.getElementById("convo_id").setAttribute("value", data.convo_id);
+    if (loading) {
+        return <p>Loading...</p>; // Show loading message until data is fetched
+    }
 
-                console.log(data.messages);
-
-                // Update messages
-                ReactDOM.render(
-                    React.createElement(renderMessage, { messages: data.messages, username }),
-                    document.getElementById('chat_window')
-                );
-            })
-            .catch(error => console.log('Error:', error));
-    };
-
-    if (loading) return React.createElement('div', null, 'Loading...');
-    if (usernames.length === 0) return React.createElement('div', null, 'No users found');
-
-    return React.createElement(
-        'div',
-        { className: 'd-flex flex-column p-3 bg-light' },
-        React.createElement('h4', null, 'Contacts'),
-        React.createElement(
-            'div',
-            { className: 'list-group' },
-            usernames.map((username, index) =>
-                React.createElement(
-                    'a',
-                    {
-                        key: index,
-                        href: '#',
-                        className: 'list-group-item list-group-item-action d-flex align-items-center',
-                        onClick: () => handleUserClick(username),
-                    },
-                    //  React.createElement('img', { src: '', className: 'rounded-circle', width: '40', height: '40' }),
-                    React.createElement('span', { className: 'ms-3' }, username)
-                )
-            )
-        )
-    );
-};
-
-function renderMessage(sender, message, sent_at) {
-    const bubbleClass = sender ? 'message-bubble right' : 'message-bubble left';
-
-    const MessageComponent = () => {
-        return React.createElement(
-            'div',
-            { className: bubbleClass },
-            React.createElement('p', null, message),
-            React.createElement('span', { className: 'timestamp' }, sent_at)
-        );
-    };
-
-    // Render the component to the #messages container
-    const messagesContainer = document.getElementById('chat_window');
-    const wrapper = document.createElement('div'); // Create a wrapper for each message
-    messagesContainer.appendChild(wrapper); // Append wrapper to container
-
-    ReactDOM.render(
-        React.createElement(MessageComponent, null),
-        wrapper
+    return (
+        <ul>
+            {usernames.map((username, index) => (
+                <li key={index}>{username}</li>
+            ))}
+        </ul>
     );
 }
 
-function processMessages(messages, username) {
-    messages.forEach(msg => {
-        const isSender = msg.sender === username;
-        const formattedSentAt = new Date(msg.sent_at).toLocaleString();
-        renderMessage(isSender, msg.content, formattedSentAt);
-        renderMessage(isSender, msg.content, msg.sent_at);
-    });
-}
 
+// const fetchUsernames = async () => {
+//     console.log("here");
+//     try {
+//         const response = await fetch('/api/usernames');
+//         const data = await response.json();
+//         setUsernames(data);
+//     } catch (error) {
+//         console.error('Error:', error);
+//     } finally {
+//         setLoading(false);
+//     }
+// };
+
+fetchUsernames();
+
+
+
+
+
+
+// // this creates the contacts
+// const UserList = () => {
+//     const [usernames, setUsernames] = useState([]);
+//     const [loading, setLoading] = useState(true);
+
+//     useEffect(() => {   // db query for usernames
+//         const fetchUsernames = async () => {
+//             console.log("here");
+//             try {
+//                 const response = await fetch('/api/usernames');
+//                 const data = await response.json();
+//                 setUsernames(data);
+//             } catch (error) {
+//                 console.error('Error:', error);
+//             } finally {
+//                 setLoading(false);
+//             }
+//         };
+
+//         fetchUsernames();
+//     }, []);
+
+//     const handleUserClick = (username) => {
+//         // Fetch conversation data on user click
+//         fetch('/api/convo', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({ username }),
+//         })
+//             .then(response => response.json())
+//             .then(data => {
+//                 document.getElementById("convo_id").innerText = "Convo ID: " + data.convo_id;
+//                 document.getElementById("convo_id").setAttribute("value", data.convo_id);
+
+//                 console.log(data.messages);
+
+//                 // Update messages
+//                 ReactDOM.render(
+//                     React.createElement(renderMessage, { messages: data.messages, username }),
+//                     document.getElementById('chat_window')
+//                 );
+//             })
+//             .catch(error => console.log('Error:', error));
+//     };
+
+//     if (loading) return React.createElement('div', null, 'Loading...');
+//     if (usernames.length === 0) return React.createElement('div', null, 'No users found');
+
+//     return React.createElement(
+//         'div',
+//         { className: 'd-flex flex-column p-3 bg-light' },
+//         React.createElement('h4', null, 'Contacts'),
+//         React.createElement(
+//             'div',
+//             { className: 'list-group' },
+//             usernames.map((username, index) =>
+//                 React.createElement(
+//                     'a',
+//                     {
+//                         key: index,
+//                         href: '#',
+//                         className: 'list-group-item list-group-item-action d-flex align-items-center',
+//                         onClick: () => handleUserClick(username),
+//                     },
+//                     //  React.createElement('img', { src: '', className: 'rounded-circle', width: '40', height: '40' }),
+//                     React.createElement('span', { className: 'ms-3' }, username)
+//                 )
+//             )
+//         )
+//     );
+// };
+
+// function renderMessage(sender, message, sent_at) {
+//     const bubbleClass = sender ? 'message-bubble right' : 'message-bubble left';
+
+//     const MessageComponent = () => {
+//         return React.createElement(
+//             'div',
+//             { className: bubbleClass },
+//             React.createElement('p', null, message),
+//             React.createElement('span', { className: 'timestamp' }, sent_at)
+//         );
+//     };
+
+//     // Render the component to the #messages container
+//     const messagesContainer = document.getElementById('chat_window');
+//     const wrapper = document.createElement('div'); // Create a wrapper for each message
+//     messagesContainer.appendChild(wrapper); // Append wrapper to container
+
+//     ReactDOM.render(
+//         React.createElement(MessageComponent, null),
+//         wrapper
+//     );
+// }
+
+// function processMessages(messages, username) {
+//     messages.forEach(msg => {
+//         const isSender = msg.sender === username;
+//         const formattedSentAt = new Date(msg.sent_at).toLocaleString();
+//         renderMessage(isSender, msg.content, formattedSentAt);
+//         renderMessage(isSender, msg.content, msg.sent_at);
+//     });
+// }
+
+
+
+
+
+// 
 // // Messages Component
 
 // const Messages = ({ messages, username }) => {
@@ -145,4 +210,4 @@ function processMessages(messages, username) {
 // Initial Render of UserList
 
 
-ReactDOM.render(React.createElement(UserList), document.getElementById('root'));
+// ReactDOM.render(React.createElement(UserList), document.getElementById('root'));
