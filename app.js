@@ -91,10 +91,12 @@ app.get('/api/usernames', (req, res) => {
 });
 
 app.post('/api/convo', (req, res) => {
-    const { username } = req.body;
+    const username = req.body.contact;
     const currentUser = req.user.username;  // Get the logged-in user's username
 
     console.log(currentUser + " viewing convo with " + username);
+
+
 
     // Step 1: Find the conversation ID between these two users
     const findConvoQuery = `

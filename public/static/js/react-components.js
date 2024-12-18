@@ -7,8 +7,6 @@
  */
 
 
-
-
 // need effect for making the api call, need state for waiting for the api call's response
 const { useState, useEffect } = React;
 
@@ -16,6 +14,7 @@ const { useState, useEffect } = React;
 export default function Contacts() {
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(true); // Track loading state
+    // const [selectedContact, setSelectedContact] = useState(null); // Track selected contact
 
 
     // simple api call to get contact names
@@ -29,34 +28,90 @@ export default function Contacts() {
     }, []);
 
     if (loading) {
-        return <p>Loading...</p>; // Show loading message until data is fetched
+        return React.createElement('p', null, 'Loading...'); // Show loading message until data is fetched
     }
 
-    return (
-        <ul>
-            {usernames.map((username, index) => (
-                <li key={index}>{username}</li>
-            ))}
-        </ul>
-    );
-}
+
+    // make that fuego contact card
+    return React.createElement(
+        'div',
+        { className: 'd-flex flex-column p-3 bg-light' },
+        React.createElement('h4', null, 'Contacts'),
+        React.createElement(
+            'div',
+            { className: 'list-group' },
+            contacts.map((contact, index) =>
+                React.createElement(
+                    'a',
+                    {
+                        key: index,
+                        href: '#',
+                        className: 'list-group-item list-group-item-action d-flex align-items-center',
+                        onClick: () => loadConversation(contact),
+                    },
+                    //  React.createElement('img', { src: '', className: 'rounded-circle', width: '40', height: '40' }),
+                    React.createElement('span', { className: 'ms-3' }, contact)
+                )
+            )
+        )
+    )
+
+    function loadConversation(contact) {
+        const [loading, setLoading] = useState(true); // Track loading state
+        const [messages, setMessages] = useState(true);
+        // const [selectedContact, setSelectedContact] = useState(null); // Track selected contact
 
 
-// const fetchUsernames = async () => {
-//     console.log("here");
-//     try {
-//         const response = await fetch('/api/usernames');
-//         const data = await response.json();
-//         setUsernames(data);
-//     } catch (error) {
-//         console.error('Error:', error);
-//     } finally {
-//         setLoading(false);
-//     }
-// };
+        // simple api call to get contact names
+        useEffect(() => {
+            fetch('/api/convo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ contact }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setMessages(data);
+                    setLoading(false); // Stop loading after data is fetched
+                });
+        }, []);
 
-fetchUsernames();
+        if (loading) {
+            return React.createElement('p', null, 'Loading...'); // Show loading message until data is fetched
+        }
 
+
+        return React.createElement()
+
+        /**
+         * 
+         * 
+         * 
+         * 
+         * for message in messages {
+              Re
+            
+            }
+        
+         * 
+         */
+
+
+
+
+    }
+};
+
+
+
+
+
+
+ReactDOM.render(React.createElement(Contacts), document.getElementById('root'));
+
+/////////
 
 
 
@@ -86,13 +141,13 @@ fetchUsernames();
 
 //     const handleUserClick = (username) => {
 //         // Fetch conversation data on user click
-//         fetch('/api/convo', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({ username }),
-//         })
+// fetch('/api/convo', {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({ username }),
+// })
 //             .then(response => response.json())
 //             .then(data => {
 //                 document.getElementById("convo_id").innerText = "Convo ID: " + data.convo_id;
@@ -172,7 +227,7 @@ fetchUsernames();
 
 
 
-// 
+
 // // Messages Component
 
 // const Messages = ({ messages, username }) => {
