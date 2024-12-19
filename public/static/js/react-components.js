@@ -6,33 +6,65 @@
  * - ???
  */
 
-
-// need effect for making the api call, need state for waiting for the api call's response
 const { useState, useEffect } = React;
 
-// react component to render contacts
 export default function Contacts() {
     const [contacts, setContacts] = useState([]);
-    const [loading, setLoading] = useState(true); // Track loading state
-    // const [selectedContact, setSelectedContact] = useState(null); // Track selected contact
+    const [loading, setLoading] = useState(true);
+    const [messages, setMessages] = useState([]);
+    const [selectedContact, setSelectedContact] = useState(null);
 
-
-    // simple api call to get contact names
+    // Fetch contacts on component mount
     useEffect(() => {
         fetch('/api/usernames', { method: 'GET' })
             .then((response) => response.json())
             .then((data) => {
                 setContacts(data);
-                setLoading(false); // Stop loading after data is fetched
+                setLoading(false);
             });
     }, []);
 
+    // Fetch messages when selectedContact changes
+    useEffect(() => {
+        if (selectedContact) {
+            fetch('/api/convo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ contact: selectedContact }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setMessages(data);
+                });
+        }
+    }, [selectedContact]);
+
     if (loading) {
-        return React.createElement('p', null, 'Loading...'); // Show loading message until data is fetched
+        return React.createElement('p', null, 'Loading...');
     }
 
+    // Create the messages section if there's a selected contact
+    const messagesSection = selectedContact && messages.length > 0
+        ? React.createElement(
+            'div',
+            { className: 'messages-container mt-3' },
+            React.createElement('h5', null, `Conversation with ${selectedContact}`),
+            messages.map((message, index) =>
+                React.createElement(
+                    'div',
+                    {
+                        key: index,
+                        className: 'message'
+                    },
+                    React.createElement('p', null, message.content)
+                )
+            )
+        )
+        : null;
 
-    // make that fuego contact card
+    // Main component render
     return React.createElement(
         'div',
         { className: 'd-flex flex-column p-3 bg-light' },
@@ -47,43 +79,19 @@ export default function Contacts() {
                         key: index,
                         href: '#',
                         className: 'list-group-item list-group-item-action d-flex align-items-center',
-                        onClick: () => loadConversation(contact),
+                        onClick: () => setSelectedContact(contact),
                     },
-                    //  React.createElement('img', { src: '', className: 'rounded-circle', width: '40', height: '40' }),
                     React.createElement('span', { className: 'ms-3' }, contact)
                 )
             )
-        )
-    )
+        ),
+        messagesSection
+    );
+}
 
-    function loadConversation(contact) {
-        const [loading, setLoading] = useState(true); // Track loading state
-        const [messages, setMessages] = useState(true);
-        // const [selectedContact, setSelectedContact] = useState(null); // Track selected contact
+// Render the component
+ReactDOM.render(React.createElement(Contacts), document.getElementById('root'));
 
-
-        // simple api call to get contact names
-        useEffect(() => {
-            fetch('/api/convo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ contact }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    setMessages(data);
-                    setLoading(false); // Stop loading after data is fetched
-                });
-        }, []);
-
-        if (loading) {
-            return React.createElement('p', null, 'Loading...'); // Show loading message until data is fetched
-        }
-
-
-        return React.createElement()
 
         /**
          * 
