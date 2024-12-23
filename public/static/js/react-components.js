@@ -2,126 +2,110 @@
 /**
  * Rendering contacts:
  * - get usernames from /api/usernames
- * - figured out how react works lol 
+ * - figured out how react works lol
  * - ???
  */
 
-const { useState, useEffect } = React;
-
-export default function Contacts() {
-    const [contacts, setContacts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [messages, setMessages] = useState([]);
-    const [selectedContact, setSelectedContact] = useState(null);
-
-    // Fetch contacts on component mount
-    useEffect(() => {
-        fetch('/api/usernames', { method: 'GET' })
-            .then((response) => response.json())
-            .then((data) => {
-                setContacts(data);
-                setLoading(false);
-            });
-    }, []);
-
-    // Fetch messages when selectedContact changes
-    useEffect(() => {
-        if (selectedContact) {
-            fetch('/api/convo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ contact: selectedContact }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    setMessages(data);
-                });
-        }
-    }, [selectedContact]);
-
-    if (loading) {
-        return React.createElement('p', null, 'Loading...');
-    }
-
-    // Create the messages section if there's a selected contact
-    const messagesSection = selectedContact && messages.length > 0
-        ? React.createElement(
-            'div',
-            { className: 'messages-container mt-3' },
-            React.createElement('h5', null, `Conversation with ${selectedContact}`),
-            messages.map((message, index) =>
-                React.createElement(
-                    'div',
-                    {
-                        key: index,
-                        className: 'message'
-                    },
-                    React.createElement('p', null, message.content)
-                )
-            )
-        )
-        : null;
-
-    // Main component render
-    return React.createElement(
-        'div',
-        { className: 'd-flex flex-column p-3 bg-light' },
-        React.createElement('h4', null, 'Contacts'),
-        React.createElement(
-            'div',
-            { className: 'list-group' },
-            contacts.map((contact, index) =>
-                React.createElement(
-                    'a',
-                    {
-                        key: index,
-                        href: '#',
-                        className: 'list-group-item list-group-item-action d-flex align-items-center',
-                        onClick: () => setSelectedContact(contact),
-                    },
-                    React.createElement('span', { className: 'ms-3' }, contact)
-                )
-            )
-        ),
-        messagesSection
-    );
-}
-
-// Render the component
-ReactDOM.render(React.createElement(Contacts), document.getElementById('root'));
 
 
-        /**
-         * 
-         * 
-         * 
-         * 
-         * for message in messages {
-              Re
-            
-            }
-        
-         * 
-         */
+// ============================================
 
 
+// const { useState, useEffect } = React;
 
+// export default function Contacts() {
+//     const [contacts, setContacts] = useState([]);
+//     const [loading, setLoading] = useState(true);
+//     const [messages, setMessages] = useState([]);
+//     const [selectedContact, setSelectedContact] = useState(null);
 
-    }
-};
+//     // Fetch contacts on component mount
+//     useEffect(() => {
+//         fetch('/api/usernames', { method: 'GET' })
+//             .then((response) => response.json())
+//             .then((data) => {
+//                 setContacts(data);
+//                 setLoading(false);
+//             });
+//     }, []);
 
+//     // Fetch messages when selectedContact changes
 
+//     useEffect(() => {
+//         if (selectedContact) {
+//             fetch('/api/convo', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({ contact: selectedContact }),
+//             })
+//                 .then((response) => response.json())
+//                 .then((data) => {
+//                     setMessages(data);
+//                 });
+//         }
+//     }, [selectedContact]);
 
+//     if (loading) {
+//         return React.createElement('p', null, 'Loading...');
+//     }
 
+//     console.log(selectedContact);
+//     console.log(messages);
 
+//     // Create the messages section if there's a selected contact
+//     const messagesSection = selectedContact && messages.length > 0
+//         ? React.createElement(
+//             'div',
+//             { className: 'messages-container mt-3' },
 
-ReactDOM.render(React.createElement(Contacts), document.getElementById('root'));
+//             // Heading for the selected contact
+//             React.createElement('h5', null, `Conversation with ${selectedContact}`),
 
-/////////
+//             // Mapping through messages to create message elements
+//             messages.map((message, index) =>
+//                 React.createElement(
+//                     'div',
+//                     {
+//                         id: 'msg',
+//                         key: index,
+//                         className: 'message',
+//                     },
+//                     React.createElement('p', null, message.content)
+//                 )
+//             )
+//         )
+//         : null;
 
+//     // Main component render
+//     return React.createElement(
+//         'div',
+//         { className: 'd-flex flex-column p-3 bg-light' },
+//         React.createElement('h4', null, 'Contacts'),
+//         React.createElement(
+//             'div',
+//             { className: 'list-group' },
+//             contacts.map((contact, index) =>
+//                 React.createElement(
+//                     'a',
+//                     {
+//                         key: index,
+//                         href: '#',
+//                         className: 'list-group-item list-group-item-action d-flex align-items-center',
+//                         onClick: () => setSelectedContact(contact),
+//                     },
+//                     React.createElement('span', { className: 'ms-3' }, contact)
+//                 )
+//             )
+//         ),
+//         messagesSection
+//     );
+// }
 
+// ReactDOM.render(React.createElement(Contacts), document.getElementById('root'));
+
+/////[==============================]
 
 
 
