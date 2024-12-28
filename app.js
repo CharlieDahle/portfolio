@@ -136,6 +136,15 @@ app.post('/api/convo', (req, res) => {
                 return res.status(500).json({ error: 'Database error' });
             }
 
+            // Log messages to inspect the data structure
+            console.log("Fetched messages:", messages);
+
+            if (!Array.isArray(messages)) {
+                console.error("Expected an array, but got:", messages);
+                return res.status(500).json({ error: 'Invalid messages format' });
+            }
+
+
             // Step 3: Return the messages and the conversation ID in JSON format
             res.json({
                 convo_id: convoId,
