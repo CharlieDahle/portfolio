@@ -6,76 +6,86 @@
  * - ???
  */
 
-// Define the Contacts component
-const { useState, useEffect } = React;
+// // Define the Contacts component
+// const { useState, useEffect } = React;
 
-function Contacts() {
-    const [contacts, setContacts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedContact, setSelectedContact] = useState(null);
+// function Contacts() {
+//     const [contacts, setContacts] = useState([]);
+//     const [loading, setLoading] = useState(true);
+//     const [selectedContact, setSelectedContact] = useState(null);
 
-    useEffect(() => {
-        fetch('/api/usernames', { method: 'GET' })
-            .then((response) => response.json())
-            .then((data) => {
-                setContacts(data);
-                setLoading(false);
-            });
-    }, []);
+//     useEffect(() => {
+//         fetch('/api/usernames', { method: 'GET' })
+//             .then((response) => response.json())
+//             .then((data) => {
+//                 setContacts(data);
+//                 setLoading(false);
+//             });
+//     }, []);
 
-    const contactList = contacts.map((contact, index) =>
-        React.createElement('div', { key: index, onClick: () => setSelectedContact(contact) },
-            React.createElement('span', null, contact)
-        )
-    );
+//     const contactList = contacts.map((contact, index) =>
+//         React.createElement(
+//             'a',
+//             {
+//                 key: index,
+//                 href: '#',
+//                 className: 'list-group-item list-group-item-action d-flex align-items-center',
+//                 onClick: () => setSelectedContact(contact),
+//             },
+//             React.createElement('span', { className: 'ms-3' }, contact)
+//         )
+//     );
 
-    return React.createElement(
-        'div',
-        { className: 'contacts-container' },
-        React.createElement('h4', null, 'Contacts'),
-        React.createElement('div', { className: 'contact-list' }, contactList)
-    );
-}
+//     return React.createElement(
+//         'div',
+//         { className: 'ps-' },
+//         React.createElement('h4', null, 'Contacts'),
+//         React.createElement('div', { className: 'contact-list' }, contactList)
+//     );
+// }
 
-// Define the Messages component
-function Messages({ selectedContact }) {
-    const [messages, setMessages] = useState([]);
 
-    useEffect(() => {
-        if (selectedContact) {
-            fetch('/api/convo', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contact: selectedContact })
-            })
-                .then((response) => response.json())
-                .then((data) => setMessages(data));
-        }
-    }, [selectedContact]);
+// =============================
 
-    const messageList = messages.map((message, index) =>
-        React.createElement('div', { key: index, className: 'message' },
-            React.createElement('p', null, message.content)
-        )
-    );
+// // Define the Messages component
+// function Messages({ selectedContact }) {
+//     const [messages, setMessages] = useState([]);
 
-    return React.createElement(
-        'div',
-        { className: 'messages-container' },
-        React.createElement('h5', null, `Conversation with ${selectedContact}`),
-        React.createElement('div', { className: 'messages-list' }, messageList)
-    );
-}
+//     useEffect(() => {
+//         if (selectedContact) {
+//             fetch('/api/convo', {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ contact: selectedContact })
+//             })
+//                 .then((response) => response.json())
+//                 .then((data) => setMessages(data));
+//         }
+//     }, [selectedContact]);
 
-// Render both components in the same HTML element
-const rootElement = document.getElementById('root');
-ReactDOM.render(
-    React.createElement('div', null,
-        React.createElement(Contacts),
-        React.createElement(Messages, { selectedContact: 'example contact' }) // You can pass dynamic data as needed
-    ),
-    rootElement
-);
+//     const messageList = messages.map((message, index) =>
+//         React.createElement('div', { key: index, className: 'message' },
+//             React.createElement('p', null, message.content)
+//         )
+//     );
+
+//     return React.createElement(
+//         'div',
+//         { className: 'messages-container' },
+//         React.createElement('h5', null, `Conversation with ${selectedContact}`),
+//         React.createElement('div', { className: 'messages-list' }, messageList)
+//     );
+// }
+
+// // Render both components in the same HTML element
+// const rootElement = document.getElementById('root');
+// ReactDOM.render(
+//     React.createElement('div', null,
+//         React.createElement(Contacts),
+//         // React.createElement(Messages, { selectedContact: 'example contact' }) // You can pass dynamic data as needed
+//     ),
+//     rootElement
+// );
 
 
 // ============================================

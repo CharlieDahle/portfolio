@@ -49,3 +49,9 @@
     color: #666;
     /* Muted color for the timestamp */
 }
+
+/* 
+.contact-card:hover {
+    background-color: lightgrey;
+    cursor: pointer;
+} */

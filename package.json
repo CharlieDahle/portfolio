@@ -13,13 +13,17 @@
   },
   "name": "fucking-around",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "public/static/js/index.js",
   "scripts": {
     "start": "nodemon app.js"
   },
-  "keywords": [],
+  "keywords": [
+    "swag",
+    "the best to ever do it",
+    "the undisputed goat"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "",
   "description": "",
   "devDependencies": {
     "nodemon": "^3.1.7"
