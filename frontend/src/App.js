@@ -1,8 +1,12 @@
 import './App.css';
+import ContactsList from './ContactList';
 
 function App() {
   return (
-    <h1>bruh</h1>
+    <div>
+      <h1>bruh</h1>
+      <ContactsList></ContactsList>
+    </div>
   );
 }
 

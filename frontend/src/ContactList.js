@@ -2,29 +2,33 @@
 //     return <h1 id='bruh'>bruh</h1>
 // }
 
-export default ContactList
+import React, { useState, useEffect } from 'react';
 
-
-
-function Contacts() {
+function ContactsList() {
     const [contacts, setContacts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedContact, setSelectedContact] = useState(null);
 
     useEffect(() => {
         fetch('/api/usernames', { method: 'GET' })
-            .then((response) => response.json())
+            .then((response) => {
+                console.log(response);
+                return response.text(); // Use `.text()` to inspect the raw response
+            })
             .then((data) => {
-                setContacts(data);
-                setLoading(false);
+                console.log(data);
+                // Optional: Try parsing the JSON here to see the issue
+                try {
+                    const jsonData = JSON.parse(data);
+                    console.log(jsonData);
+                } catch (err) {
+                    console.error('JSON Parse Error:', err);
+                }
             });
     }, []);
 
-    console.log
 
-    if (loading) {
-        return <h1>loading</h1>
-    }
 
-    return 
+
+    return <p>poop fart</p>
 };
+
+export default ContactsList
