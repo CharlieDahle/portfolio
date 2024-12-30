@@ -1,7 +1,7 @@
 # portfolio
  
 Bootstrap 5,
-React [with babel....],
+React,
 Express,
 Sqlite,
 
