@@ -41,7 +41,7 @@ app.get('/index', (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}/index`);
+    console.log(`Server running on http://localhost:${PORT}/trying`);
 });
 
 app.get('/trying', (req, res) => {
@@ -81,6 +81,7 @@ app.get('/logout', (req, res) => {
 
 
 app.get('/api/usernames', (req, res) => {
+    console.log("we're here")
     db.all("SELECT username FROM users", (err, rows) => {
         if (err) {
             return res.status(500).json({ error: 'Database error' });
