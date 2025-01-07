@@ -1,8 +1,8 @@
-function ContactList(){
-    return <h1 id='bruh'>bruh</h1>
-}
+// function ContactList(){
+//     return <h1 id='bruh'>bruh</h1>
+// }
 
-export default ContactList
+// export default ContactList
 
 
 
@@ -32,56 +32,56 @@ export default ContactList
 //     }
 
 
-//     const contactItems = contacts.map((contact, index) =>
-//         React.createElement(
-//             'a',
-//             {
-//                 key: index,
-//                 href: '#',
-//                 className: 'list-group-item list-group-item-action',
-//                 onClick: () => setSelectedContact(contact),
-//             },
-//             React.createElement(
-//                 'div',
-//                 { className: 'card border-0 contact-card' },
-//                 React.createElement(
-//                     'div',
-//                     { className: 'card-body d-flex align-items-center p-3' },
-//                     // Contact Photo
-//                     React.createElement(
-//                         'div',
-//                         { className: 'flex-shrink-0' },
-//                         React.createElement('img', {
-//                             src: `/api/placeholder/48/48`, // Placeholder image
-//                             className: 'rounded-circle',
-//                             width: '48',
-//                             height: '48',
-//                         })
-//                     ),
-//                     // Contact Info
-//                     React.createElement(
-//                         'div',
-//                         { className: 'ms-3 flex-grow-1' },
-//                         React.createElement(
-//                             'h6',
-//                             { className: 'mb-0 fw-bold' },
-//                             contact // Use contact's name dynamically
-//                         ),
-//                         // React.createElement(
-//                         //     'p',
-//                         //     { className: 'mb-0 text-muted text-truncate' },
-//                         //     contact.message || 'No message' // Fallback for message
-//                         // )
-//                     ),
-//                     // Timestamp
-//                     React.createElement(
-//                         'small',
-//                         { className: 'text-muted ms-auto' }, 'N/A' // Fallback for timestamp
-//                     )
-//                 )
-//             )
-//         )
-//     );
+    const contactItems = contacts.map((contact, index) =>
+        React.createElement(
+            'a',
+            {
+                key: index,
+                href: '#',
+                className: 'list-group-item list-group-item-action',
+                onClick: () => setSelectedContact(contact),
+            },
+            React.createElement(
+                'div',
+                { className: 'card border-0 contact-card' },
+                React.createElement(
+                    'div',
+                    { className: 'card-body d-flex align-items-center p-3' },
+                    // Contact Photo
+                    React.createElement(
+                        'div',
+                        { className: 'flex-shrink-0' },
+                        React.createElement('img', {
+                            src: `/api/placeholder/48/48`, // Placeholder image
+                            className: 'rounded-circle',
+                            width: '48',
+                            height: '48',
+                        })
+                    ),
+                    // Contact Info
+                    React.createElement(
+                        'div',
+                        { className: 'ms-3 flex-grow-1' },
+                        React.createElement(
+                            'h6',
+                            { className: 'mb-0 fw-bold' },
+                            contact // Use contact's name dynamically
+                        ),
+                        // React.createElement(
+                        //     'p',
+                        //     { className: 'mb-0 text-muted text-truncate' },
+                        //     contact.message || 'No message' // Fallback for message
+                        // )
+                    ),
+                    // Timestamp
+                    React.createElement(
+                        'small',
+                        { className: 'text-muted ms-auto' }, 'N/A' // Fallback for timestamp
+                    )
+                )
+            )
+        )
+    );
 
 
 
