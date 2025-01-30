@@ -12,7 +12,7 @@ expressWs(app);  // Integrates express-ws with the app
 messageRoutes(app);  // Call the WebSocket route handling
 
 // Set the port
-const PORT = 3000;
+const PORT = 5001;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

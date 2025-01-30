@@ -11,8 +11,8 @@
     "sortablejs": "^1.15.3",
     "sqlite3": "^5.1.7"
   },
-  "name": "fucking-around",
-  "version": "1.0.0",
+  "name": "backend",
+  "version": "4.2.0",
   "main": "public/static/js/index.js",
   "scripts": {
     "start": "nodemon app.js"
@@ -21,11 +21,5 @@
     "swag",
     "the best to ever do it",
     "the undisputed goat"
-  ],
-  "author": "",
-  "license": "",
-  "description": "",
-  "devDependencies": {
-    "nodemon": "^3.1.7"
-  }
+  ]
 }

@@ -1,12 +1,23 @@
-import './App.css';
-import ContactsList from './ContactList';
+import React, { useState } from 'react';
+import ContactsList from './ContactsList';
+import ChatWindow from './ChatWindow';
 
-function App() {
+const App = () => {
+  const [selectedContact, setSelectedContact] = useState(null);
+
   return (
-    <div>     
-      <ContactsList style={{ overflowY: 'scroll' }}></ContactsList>
+    <div className="container-fluid vh-100">
+      <div className="row h-100">
+        <ContactsList 
+          onSelectContact={setSelectedContact}
+          selectedContact={selectedContact}
+        />
+        <ChatWindow 
+          contact={selectedContact}
+        />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
