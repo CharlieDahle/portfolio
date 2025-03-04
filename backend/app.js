@@ -1,9 +1,9 @@
 const express = require('express');  // Import Express
-const session = require('express-session');  // Import session middleware
-const passport = require('./config/passport');
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./database/database.db');
-const messageRoutes = require('./message');  // Import WebSocket logic
+const JWTService = require('./src/services/jwt.service');
+const { authenticateToken } = require('./src/middleware/auth.middleware');
+const db = new sqlite3.Database('./src/database/database.db');
+const messageRoutes = require('./src/websocket/message');  // Import WebSocket logic
 const expressWs = require("express-ws");
 
 // Create an instance of Express
@@ -19,20 +19,6 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-/** ========== Passport stuff =========== */
-
-app.use(session({
-    secret: 'key',  // Secret key used to sign the session ID cookie 
-    resave: false,  // Don't save session if unmodified
-    saveUninitialized: false  // Don't create a session until something is stored
-}));
-// Initialize Passport to manage authentication
-app.use(passport.initialize());
-// Initialize Passport session handling (used to store user info in the session)
-app.use(passport.session());
-
-/** ===================================== */
-
 
 // Basic route
 app.get('/index', (req, res) => {
@@ -45,31 +31,47 @@ app.listen(PORT, () => {
 });
 
 app.get('/trying', (req, res) => {
-    res.sendFile(__dirname + '/public/trying.html');
+    res.sendFile(__dirname + 'trying.html');
 
 });
 
-app.get('/chat', isAuthenticated, (req, res) => {
+app.get('/chat', (req, res) => {
     res.sendFile(__dirname + '/private/chat.html');
 });
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    db.get(
+      'SELECT * FROM users WHERE username = ? AND password = ?',
+      [username, password],
+      (err, user) => {
+        if (err) {
+          return res.status(500).json({ error: 'Database error' });
+        }
+        
+        if (!user) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+        }
+  
+        const payload = {
+          id: user.id,
+          username: user.username
+        };
+  
+        const token = JWTService.generateToken(payload);
+        res.json({ token });
+      }
+    );
+});
 
-// POST route to handle login form submission
-app.post('/login',
-    passport.authenticate('local',
-        {
-            successRedirect: '/chat',
-            failureRedirect: '/trying'
-        })
-);
+// Protected route example
+app.get('/protected', authenticateToken, (req, res) => {
+    res.json({ 
+      message: 'Protected route accessed successfully', 
+      user: req.user 
+    });
+  });
 
-
-// Middleware to check if user is authenticated
-function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();  // Continue to the dashboard if authenticated
-    }
-    res.redirect('/trying');  // Redirect to login page if not authenticated
-}
 
 app.get('/logout', (req, res) => {
     req.logout((err) => {
@@ -81,7 +83,6 @@ app.get('/logout', (req, res) => {
 
 
 app.get('/api/usernames', (req, res) => {
-    console.log("we're here")
     db.all("SELECT username FROM users", (err, rows) => {
         if (err) {
             return res.status(500).json({ error: 'Database error' });
@@ -92,6 +93,10 @@ app.get('/api/usernames', (req, res) => {
 });
 
 app.post('/api/convo', (req, res) => {
+
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
 
     const username = req.body.contact;
     const currentUser = req.user.username;  // Get the logged-in user's username
