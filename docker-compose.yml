@@ -7,15 +7,14 @@ services:
       - ./messaging-app:/app
       - /app/node_modules
     environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:5000
+      - NEXT_PUBLIC_API_URL=http://localhost:5001
     depends_on:
       - backend
 
   backend:
     build: ./messaging-backend
     ports:
-      - "5000:5000"
+      - "5001:5000"
     volumes:
       - ./messaging-backend:/app
       - /app/node_modules
