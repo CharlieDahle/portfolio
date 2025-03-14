@@ -1,13 +1,18 @@
 services:
   frontend:
-    build: ./messaging-app
+    build: ./charlie-chat
     ports:
       - "3000:3000"
     volumes:
-      - ./messaging-app:/app
+      - ./charlie-chat:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:5001
     # depends_on:
     #   - backend
-
+  
+    # Add any other backend configuration
 #   backend:
 #     build: ./messaging-backend
 #     ports:
