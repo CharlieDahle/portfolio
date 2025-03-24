@@ -1,9 +1,25 @@
 "use client";
 
 import Link from 'next/link';
+import { auth } from '@/auth'
 
-export default function Home() {
-  return (
+export default async function Home() {
+  const session = await auth()
+
+
+  if (session?.user) {
+    return (
+    <div>
+      <h1>User Profile</h1>
+      <p>Email: {session.user.email}</p>
+      <Link href="/">Return to Home</Link>
+    </div>);
+  }
+
+
+
+  else
+    return (
     <div className="p-8">
       <h1 className="text-xl mb-4">My App</h1>
       <div className="flex gap-4">

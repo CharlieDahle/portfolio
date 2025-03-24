@@ -1,4 +1,5 @@
 import { signIn } from "@/auth"
+import { redirect } from "next/navigation"
 
 export function SignIn() {
   return (
@@ -9,7 +10,9 @@ export function SignIn() {
           className="space-y-4"
           action={async (formData) => {
             "use server"
-            await signIn("credentials", formData)
+            await signIn("credentials", formData, {redirectTo: "/page" }
+          
+          )
           }}
         >
           <div className="space-y-2">
